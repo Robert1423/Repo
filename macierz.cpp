@@ -1,3 +1,5 @@
+//konsolowy kalkulator macierzowy
+
 #include <iostream>
 #include <vector>
 #include <limits>
@@ -6,25 +8,25 @@
 
 using namespace std;
 
-void menu();
-void pauza();
+void menu(); //wyświetlanie menu wyboru opcji
+void pauza(); //wstrzymanie programu
 void stworz_macierz(vector<vector<double>> & v);
 void wyswietl_macierz(vector<vector<double>> & v);
 void dodaj(vector<vector<double>> v1, vector<vector<double>> v2);
 void odejmij(vector<vector<double>> v1, vector<vector<double>> v2);
-void skalar(vector<vector<double>> & v);
+void skalar(vector<vector<double>> & v); //mnożenie przez liczbe
 void mnozenie(vector<vector<double>> v1, vector<vector<double>> v2);
 vector<vector<double>> transponuj(vector<vector<double>> v);
-vector<vector<double>> tnij(vector<vector<double>> & v,int n, int m);
-vector<vector<double>> tnijw(vector<vector<double>> & v,int n);
-vector<vector<double>> tnijk(vector<vector<double>> & v,int n);
-double det ( int n, int w, int * WK, vector<vector<double>> & A );
-double det2(vector<vector<double>> & v);
-double det3(vector<vector<double>> & v);
-void wyz(vector<vector<double>> & v);
-vector<vector<double>> dopelnienie(vector<vector<double>> v);
-double reku(vector<vector<double>> v, vector<double> pw);
-void odwrotna(vector<vector<double>> v);
+vector<vector<double>> tnij(vector<vector<double>> & v,int n, int m); //funkcja do wycinania wierszy i kolumn z macierzy w celu obliczenia wyznacznika
+vector<vector<double>> tnijw(vector<vector<double>> & v,int n); //wyciecie wiersza
+vector<vector<double>> tnijk(vector<vector<double>> & v,int n); //wyciecei kolumny
+double det ( int n, int w, int * WK, vector<vector<double>> & A ); //obliczenie wyznacznika
+double det2(vector<vector<double>> & v); //wyznacznik macierzy 2x2 i wypisanie obliczen
+double det3(vector<vector<double>> & v); //det 3x3 i obliczenia
+void wyz(vector<vector<double>> & v); //sterowanie funckjami wyznaczików
+vector<vector<double>> dopelnienie(vector<vector<double>> v); //dopełnienie algebraiczne macierzy
+double reku(vector<vector<double>> v, vector<double> pw); //wyznacznik i obliczenia
+void odwrotna(vector<vector<double>> v); //macierz odwrotna i obliczenia
 
 int main()
 {
@@ -36,7 +38,7 @@ int main()
     {
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout<<"Blad!\nSpruboj ponownie\n";
+        cout<<"Blad!\nSprobuj ponownie\n";
         getchar();
         menu();
     }
@@ -102,7 +104,7 @@ int main()
         {
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout<<"Blad!\nSpruboj ponownie\n";
+            cout<<"Blad!\nSprobuj ponownie\n";
             getchar();
             menu();
         }
@@ -134,14 +136,14 @@ void stworz_macierz(vector<vector<double>> & v)
     {
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout<<"Blad!\nSpruboj ponownie\nPodaj ilość wierszy: ";
+        cout<<"Blad!\nSprobuj ponownie\nPodaj ilość wierszy: ";
     }
     cout<<"Podaj ilość kolumn: ";
     while (!(cin>>y))
     {
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout<<"Blad!\nSpruboj ponownie\nPodaj ilość kolumn: ";
+        cout<<"Blad!\nSprobuj ponownie\nPodaj ilość kolumn: ";
     }
     for (int i=0; i<x; i++)
     {
@@ -226,7 +228,7 @@ void skalar(vector<vector<double>> & v)
     {
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout<<"Blad!\nSpruboj ponownie\nPodaj liczbe: ";
+        cout<<"Blad!\nSprobuj ponownie\nPodaj liczbe: ";
     }
     system("clear");
     cout<<"Macierz A\n";
@@ -492,8 +494,6 @@ double reku(vector<vector<double>> v,vector<double> pw)
         for (int i=0; i<m[0].size(); i++)
         {
             vector<vector<double>> temp=tnijk(v,i);
-            cout<<"\nTemp po odcieciu "<<i+1<<" kolumny\n";
-            wyswietl_macierz(temp);
             double d3=det3(temp);
             cout<<"\n("<<-1<<") ^ ("<<1<<"+"<<i+1<<") * "<<pw[i]<<" * "<<d3;
             double t;
@@ -504,11 +504,7 @@ double reku(vector<vector<double>> v,vector<double> pw)
         }
     }
     else
-        //for (int i=0; i<pw.size(); i++)
-        //{
-            d+=/*mn*pw[i]**/reku(m,tpw);
-          //  mn=-mn;
-        //}
+            d+=reku(m,tpw);
     return d;
 }
 
