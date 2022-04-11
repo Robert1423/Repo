@@ -9,9 +9,9 @@
 using namespace std;
 
 void wyswietl_macierz(vector<vector<double>> & v);
-void sczytaj_rownanie(string r, vector<vector<double>> & wsp, vector<double> & w);
-vector<vector<double>> zastap(vector<vector<double>> & wsp, vector<double> & w, int n);
-double det ( int n, int w, int * WK, vector<vector<double>> & A );
+void sczytaj_rownanie(string r, vector<vector<double>> & wsp, vector<double> & w); //funkcja skladajaca macierz z rownania
+vector<vector<double>> zastap(vector<vector<double>> & wsp, vector<double> & w, int n); //funkcja podmieniajac kolumne w macierzy wspolczynikow na macierz wynikow
+double det ( int n, int w, int * WK, vector<vector<double>> & A ); //wyznacznik
 bool czy_zero(vector<double> v);
 
 int main()
@@ -92,48 +92,49 @@ void wyswietl_macierz(vector<vector<double>> & v)
 
 void sczytaj_rownanie(string r, vector<vector<double>> & wsp, vector<double> & w)
 {
+	//funkcja szczytuje wpisane rownanie i tworzy z nich macierze wspolczynikow i wynikow rownan, ktore posluza do znalezienia rozwiazań
     int i=0;
-    string temp;
+    string temp; //do zlozenia liczby ze znakow rownania
     double x;
-    char z;
+    char z; //znak liczby
     vector<double> row;
     for (char ch : r)
     {
-        if (ch=='-')
+        if (ch=='-')//sprawdzenie jaki liczba ma znak i zapisanie go
             z='-';
         if (ch=='+')
             z='+';
         if (isdigit(ch))
-            temp.push_back(ch);
-        if (!isdigit(ch)&&temp.size()>0)
+            temp.push_back(ch);//skadanie liczby
+        if (!isdigit(ch)&&temp.size()>0) //jezeli nastepny znak nie jest liczba i liczba istnieje wrzuca liczbe do wiersza macierzy
         {
-            x=stod(temp);
+            x=stod(temp); //konwersja liczby z rownania na double
             if (z=='-')
-                x=-x;
+                x=-x; //zmiana znaku jezeli trzeba
             if (temp.size()>0)
-                row.push_back(x);
-            temp.erase(temp.begin(),temp.end());
+                row.push_back(x); //skladanie wiersza
+            temp.erase(temp.begin(),temp.end()); //czysczenie temp
         }
         if (ch=='=')
         {
-            wsp.push_back(row);
+            wsp.push_back(row); //skladanie macierzy wspolczynikow
             break;
         }
         i++;
     }
     z='+';
     temp.erase(temp.begin(),temp.end());
-    for (i; i<r.size(); i++)
+    for (i; i<r.size(); i++) //skladanie macierzy wynikow rownan
     {
-        if (r[i]=='-')
+        if (r[i]=='-')//zmiana znaku jezeli potrzeba
             z='-';
         if (isdigit(r[i]))
-            temp.push_back(r[i]);
+            temp.push_back(r[i]);//skladanie liczby
     }
-    x=stod(temp);
-    if (z=='-')
+    x=stod(temp);//konwersja
+    if (z=='-')//zmiana znaku jezeli potrzeba
         x=-x;
-    w.push_back(x);
+    w.push_back(x);//skladanie macierzy wynikow
 }
 
 vector<vector<double>> zastap(vector<vector<double>> & wsp, vector<double> & w, int n)
@@ -144,7 +145,7 @@ vector<vector<double>> zastap(vector<vector<double>> & wsp, vector<double> & w, 
        vector<double> row;
        for (int j=0; j<wsp[i].size(); j++)
                row.push_back(wsp[i][j]);
-       row[n]=w[i];
+       row[n]=w[i]; //zmiana podanego wyrazu w wierszu na wyraz z macierzy wynikow
        m.push_back(row);
     }
     return m;
